@@ -1,0 +1,57 @@
+services:
+  redis:
+    image: "redis:alpine"
+    networks:
+      - monitoring
+  
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    networks:
+      - monitoring
+    depends_on:
+    - redis
+      
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8003:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - monitoring
+    depends_on:
+    - redis
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 8001:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+    depends_on:
+    - cadvisor
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 8002:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password #replace with secret
+    volumes:
+    - "./datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yml"
+    networks:
+      - monitoring
+    depends_on:
+    - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
