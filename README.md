@@ -6,9 +6,9 @@ Take Home Test for DevOps
 ### Architecture
 ![alt text](resources/architecture.png)
 
-The system will be using Prometheus for monitoring the Web app's metrics and Grafana's dashboard will be used for visualizing the scraped metrics.
+The system will be using cAdvisor to gather real time metrics and Prometheus to scrape the metrics. Grafana's dashboard will be used for visualizing the scraped metrics.
 
-This setup allows for effective scaling by exposing container metrics to Prometheus every time a new container is going to be monitored.
+This setup allows for effective scaling by automatically exposing container metrics to cAdvisor every time a new container is going to be added. Grafana can be used also for monitoring and analyzing data from metrics.
 
 ### Prerequisites 
 
