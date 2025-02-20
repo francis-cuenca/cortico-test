@@ -1,4 +1,4 @@
-#This yaml tells Grafana to use prometheus as a data source
+#This yaml tells Grafana to use prometheus as a data source by default
 datasources:
   - name: prometheus
     type: prometheus
