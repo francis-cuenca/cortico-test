@@ -1,0 +1,33 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    networks:
+      - monitoring
+  redis:
+    image: "redis:alpine"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 8001:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 8002:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
