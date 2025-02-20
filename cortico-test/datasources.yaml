@@ -1,0 +1,7 @@
+#This yaml tells Grafana to use prometheus as a data source
+datasources:
+  - name: prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
